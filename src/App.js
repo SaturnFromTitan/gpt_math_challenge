@@ -44,17 +44,20 @@ function App() {
     if (!gameOver) {
       const timer = setInterval(() => {
         setSecondsLeft((seconds) => {
-          if (seconds <= 0) {
+          if (seconds <= 1) {
             clearInterval(timer);
-            setGameOver(true);
             return 0;
           }
           return seconds - 1;
         });
+  
+        if (secondsLeft === 1) {
+          setGameOver(true);
+        }
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [gameOver]);
+  }, [gameOver, secondsLeft]);
 
 
   function handleSubmit(e) {
