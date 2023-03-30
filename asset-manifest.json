@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/gpt_math_challenge/static/css/main.b695ba2c.css",
+    "main.js": "/gpt_math_challenge/static/js/main.0a66fa51.js",
+    "static/js/787.727f4605.chunk.js": "/gpt_math_challenge/static/js/787.727f4605.chunk.js",
+    "index.html": "/gpt_math_challenge/index.html",
+    "main.b695ba2c.css.map": "/gpt_math_challenge/static/css/main.b695ba2c.css.map",
+    "main.0a66fa51.js.map": "/gpt_math_challenge/static/js/main.0a66fa51.js.map",
+    "787.727f4605.chunk.js.map": "/gpt_math_challenge/static/js/787.727f4605.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b695ba2c.css",
+    "static/js/main.0a66fa51.js"
+  ]
+}
