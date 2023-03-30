@@ -4,6 +4,8 @@ import "./App.css";
 function App() {
   const [secondsLeft, setSecondsLeft] = useState(10);
   const [score, setScore] = useState(0);
+  const [highestScore, setHighestScore] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
   const [firstNumber, setFirstNumber] = useState(0);
   const [secondNumber, setSecondNumber] = useState(0);
   const [operator, setOperator] = useState("+");
@@ -64,6 +66,9 @@ function App() {
       default:
         break;
     }
+
+    setTotalQuestions(totalQuestions + 1);
+
     if (parseFloat(userAnswer) === correctAnswer) {
       setScore(score + 1);
     } else {
@@ -81,11 +86,15 @@ function App() {
   }
 
   function restartGame() {
+    if (score > highestScore) {
+      setHighestScore(score);
+    }
     setSecondsLeft(10);
     setScore(0);
     setUserAnswer("");
     setGameOver(false);
     setWrongAnswers([]);
+    setTotalQuestions(0);
     generateNewQuestion();
   }
 
@@ -93,16 +102,21 @@ function App() {
     return (
       <div className="App">
         <h1>Time's up!</h1>
-        <h2>Your score: {score}</h2>
+        <h2>Your score: {score} / {totalQuestions}</h2>
+        <h3>Highest score: {highestScore}</h3>
         <h3>Great effort!</h3>
-        <h4>Wrong Answers:</h4>
-        <ul>
-          {wrongAnswers.map((answer, index) => (
-            <li key={index}>
-              {answer.question} = {answer.userAnswer} (Correct: {answer.correctAnswer})
-            </li>
-          ))}
-        </ul>
+        {wrongAnswers.length > 0 && (
+          <>
+            <h4>Wrong Answers:</h4>
+            <ul>
+              {wrongAnswers.map((answer, index) => (
+                <li key={index}>
+                  {answer.question} = {answer.userAnswer} (Correct: {answer.correctAnswer})
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
         <button onClick={restartGame}>Play again</button>
       </div>
     );
