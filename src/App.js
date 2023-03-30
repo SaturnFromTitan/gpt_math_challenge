@@ -2,19 +2,32 @@ import React, { useState, useEffect, useCallback } from "react";
 import "./App.css";
 
 function App() {
-  const [secondsLeft, setSecondsLeft] = useState(60);
+  const [secondsLeft, setSecondsLeft] = useState(10);
   const [score, setScore] = useState(0);
   const [firstNumber, setFirstNumber] = useState(0);
   const [secondNumber, setSecondNumber] = useState(0);
   const [operator, setOperator] = useState("+");
   const [userAnswer, setUserAnswer] = useState("");
   const [gameOver, setGameOver] = useState(false);
+  const [wrongAnswers, setWrongAnswers] = useState([]);
 
   const generateNewQuestion = useCallback(() => {
+    function setNewOperator() {
+      const operators = ["+", "-", "*", "/"];
+      const newOperator = operators[Math.floor(Math.random() * operators.length)];
+
+      if (newOperator === "/") {
+        const product = firstNumber * secondNumber;
+        setFirstNumber(product);
+      }
+
+      setOperator(newOperator);
+    }
+
     setFirstNumber(Math.floor(Math.random() * 10));
-    setSecondNumber(Math.floor(Math.random() * 10) + 1);
+    setSecondNumber(Math.floor(Math.random() * 10) + 1);  // avoid division by 0
     setNewOperator();
-  }, []);
+  }, [firstNumber, secondNumber]);
 
   useEffect(() => {
     generateNewQuestion();
@@ -31,17 +44,6 @@ function App() {
     return () => clearInterval(timer);
   }, [generateNewQuestion]);
 
-  function setNewOperator() {
-    const operators = ["+", "-", "*", "/"];
-    const newOperator = operators[Math.floor(Math.random() * operators.length)];
-
-    if (newOperator === "/") {
-      const product = firstNumber * secondNumber;
-      setFirstNumber(product);
-    }
-
-    setOperator(newOperator);
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -64,8 +66,26 @@ function App() {
     }
     if (parseFloat(userAnswer) === correctAnswer) {
       setScore(score + 1);
+    } else {
+      setWrongAnswers((prev) => [
+        ...prev,
+        {
+          question: `${firstNumber} ${operator} ${secondNumber}`,
+          userAnswer,
+          correctAnswer,
+        },
+      ]);
     }
     setUserAnswer("");
+    generateNewQuestion();
+  }
+
+  function restartGame() {
+    setSecondsLeft(10);
+    setScore(0);
+    setUserAnswer("");
+    setGameOver(false);
+    setWrongAnswers([]);
     generateNewQuestion();
   }
 
@@ -74,6 +94,16 @@ function App() {
       <div className="App">
         <h1>Time's up!</h1>
         <h2>Your score: {score}</h2>
+        <h3>Great effort!</h3>
+        <h4>Wrong Answers:</h4>
+        <ul>
+          {wrongAnswers.map((answer, index) => (
+            <li key={index}>
+              {answer.question} = {answer.userAnswer} (Correct: {answer.correctAnswer})
+            </li>
+          ))}
+        </ul>
+        <button onClick={restartGame}>Play again</button>
       </div>
     );
   }
