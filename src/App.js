@@ -35,19 +35,26 @@ function App() {
   }, [firstNumber, secondNumber]);
 
   useEffect(() => {
-    generateNewQuestion();
-    const timer = setInterval(() => {
-      setSecondsLeft((seconds) => {
-        if (seconds <= 0) {
-          clearInterval(timer);
-          setGameOver(true);
-          return 0;
-        }
-        return seconds - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [generateNewQuestion]);
+    if (!gameOver) {
+      generateNewQuestion();
+    }
+  }, [generateNewQuestion, gameOver]);
+
+  useEffect(() => {
+    if (!gameOver) {
+      const timer = setInterval(() => {
+        setSecondsLeft((seconds) => {
+          if (seconds <= 0) {
+            clearInterval(timer);
+            setGameOver(true);
+            return 0;
+          }
+          return seconds - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [gameOver]);
 
 
   function handleSubmit(e) {
