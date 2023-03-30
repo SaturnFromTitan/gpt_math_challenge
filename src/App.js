@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./App.css";
 
-const INITIAL_TIME = 10;
+const INITIAL_TIME = 30;
 
 function App() {
   const [secondsLeft, setSecondsLeft] = useState(INITIAL_TIME);
@@ -145,7 +145,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Mental Math Game</h1>
+      <h1>GPT Math Challenge</h1>
       <h2>Time remaining: {secondsLeft} seconds</h2>
       <h3>Score: {score}</h3>
       <form onSubmit={handleSubmit}>
