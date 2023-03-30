@@ -101,12 +101,18 @@ function App() {
 
   if (gameOver) {
     const currentHighestScore = Math.max(highestScore, score);
+    let resultMessage = "That's great effort!";
+    if (totalQuestions === score) {
+      resultMessage = "Perfect!";
+    } else if (score === 0) {
+      resultMessage = "Ouch!";
+    }
 
     return (
       <div className="App">
         <h1>Time's up!</h1>
         <h2>
-        {score} out of {totalQuestions} questions correct. That's great effort!
+          {score} out of {totalQuestions} questions correct. {resultMessage}
         </h2>
         <h3>Your Highscore is {currentHighestScore}</h3>
         {wrongAnswers.length > 0 && (
