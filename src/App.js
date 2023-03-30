@@ -112,8 +112,10 @@ function App() {
   if (gameOver) {
     const currentHighestScore = Math.max(highestScore, score);
     let resultMessage = "That's great effort!";
-    if (totalQuestions === score) {
-      resultMessage = "Perfect!";
+    if (totalQuestions == 0) {
+      resultMessage = "Try again!";
+    } else if (totalQuestions === score) {
+      resultMessage = "Perfection!";
     } else if (score === 0) {
       resultMessage = "Ouch!";
     }
