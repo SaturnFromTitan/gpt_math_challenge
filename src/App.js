@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./App.css";
 
+const INITIAL_TIME = 10;
+
 function App() {
-  const [secondsLeft, setSecondsLeft] = useState(10);
+  const [secondsLeft, setSecondsLeft] = useState(INITIAL_TIME);
   const [score, setScore] = useState(0);
   const [highestScore, setHighestScore] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -26,8 +28,9 @@ function App() {
       setOperator(newOperator);
     }
 
-    setFirstNumber(Math.floor(Math.random() * 10));
-    setSecondNumber(Math.floor(Math.random() * 10) + 1);  // avoid division by 0
+    // +1 to avoid 0 as input
+    setFirstNumber(Math.floor(Math.random() * 10) + 1);
+    setSecondNumber(Math.floor(Math.random() * 10) + 1);
     setNewOperator();
   }, [firstNumber, secondNumber]);
 
@@ -86,10 +89,8 @@ function App() {
   }
 
   function restartGame() {
-    if (score > highestScore) {
-      setHighestScore(score);
-    }
-    setSecondsLeft(10);
+    setHighestScore((prevHighestScore) => Math.max(prevHighestScore, score));
+    setSecondsLeft(INITIAL_TIME);
     setScore(0);
     setUserAnswer("");
     setGameOver(false);
@@ -99,19 +100,23 @@ function App() {
   }
 
   if (gameOver) {
+    const currentHighestScore = Math.max(highestScore, score);
+
     return (
       <div className="App">
         <h1>Time's up!</h1>
-        <h2>Your score: {score} / {totalQuestions}</h2>
-        <h3>Highest score: {highestScore}</h3>
-        <h3>Great effort!</h3>
+        <h2>
+        {score} out of {totalQuestions} questions correct. That's great effort!
+        </h2>
+        <h3>Your Highscore is {currentHighestScore}</h3>
         {wrongAnswers.length > 0 && (
           <>
             <h4>Wrong Answers:</h4>
             <ul>
               {wrongAnswers.map((answer, index) => (
                 <li key={index}>
-                  {answer.question} = {answer.userAnswer} (Correct: {answer.correctAnswer})
+                  {answer.question} = {answer.userAnswer} (Correct:{" "}
+                  {answer.correctAnswer})
                 </li>
               ))}
             </ul>
